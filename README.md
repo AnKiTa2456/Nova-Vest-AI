@@ -1,92 +1,10 @@
 # NovaVest AI — AI-Powered Investment Intelligence Platform
 
-A full-stack fintech SaaS platform with a clean **frontend / backend separation** for independent deployment.
+A full-stack fintech SaaS platform built with Next.js 14, Express, and MongoDB Atlas. Features a glassmorphism dark UI, JWT authentication, real-time dashboard, and AI investment recommendations.
 
----
-
-## Project Structure
-
-```
-novavest-ai/
-├── frontend/           ← Next.js 14 → deploy to Vercel
-│   ├── src/
-│   │   ├── app/        ← Pages (landing, auth, dashboard, analytics, settings, admin)
-│   │   ├── components/ ← UI components (landing, dashboard)
-│   │   ├── hooks/      ← useAuth hook
-│   │   ├── lib/        ← API client, JWT verify, utils, constants
-│   │   ├── middleware.ts ← Route protection (Edge Runtime)
-│   │   └── types/      ← TypeScript interfaces
-│   ├── package.json
-│   └── next.config.js  ← Rewrites /api/* → backend (dev + prod)
-│
-├── backend/            ← Express.js → deploy to Render / Railway
-│   ├── src/
-│   │   ├── index.ts    ← Express app entry point (port 4000)
-│   │   ├── routes/     ← auth, dashboard, transactions, profile, ai
-│   │   ├── middleware/  ← requireAuth (JWT + cookie/Bearer)
-│   │   └── lib/        ← auth, db (Prisma), dummy-data, validations
-│   ├── prisma/
-│   │   └── schema.prisma
-│   └── package.json
-│
-└── package.json        ← Root: `npm run dev` starts both servers
-```
-
----
-
-## Quick Start (Local Development)
-
-### 1. Install all dependencies
-
-```bash
-npm run install:all
-# or manually:
-# cd backend && npm install
-# cd frontend && npm install
-```
-
-### 2. Configure environment variables
-
-```bash
-cp backend/.env.example backend/.env.local
-cp frontend/.env.example frontend/.env.local
-```
-
-**`backend/.env.local`**
-```
-DATABASE_URL="mongodb://localhost:27017/novavest"
-JWT_SECRET="novavest-demo-secret-key-32chars-min"
-PORT=4000
-FRONTEND_URL="http://localhost:3000"
-NODE_ENV="development"
-```
-
-**`frontend/.env.local`**
-```
-API_URL="http://localhost:4000"
-JWT_SECRET="novavest-demo-secret-key-32chars-min"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
-
-> **Seed demo data** (first time only):
-> ```bash
-> cd backend && npm run db:seed
-> ```
-> This creates `demo@novavest.ai` / `demo1234` and `admin@novavest.ai` / `admin1234` in MongoDB.
-
-### 3. Start both servers
-
-```bash
-npm run dev
-# Backend → http://localhost:4000
-# Frontend → http://localhost:3000
-```
-
-Or start separately:
-```bash
-npm run dev:backend     # port 4000
-npm run dev:frontend    # port 3000
-```
+🌐 **Live Demo:** https://nova-vest-ai.vercel.app
+🔧 **Backend API:** https://nova-vest-ai.onrender.com
+📦 **GitHub:** https://github.com/AnKiTa2456/Nova-Vest-AI
 
 ---
 
@@ -99,71 +17,151 @@ npm run dev:frontend    # port 3000
 
 ---
 
-## Architecture
+## Features
 
-### How Frontend ↔ Backend Communicate
-
-The frontend's `next.config.js` uses **Next.js rewrites** to proxy all `/api/*` requests to the backend:
-
-```
-Browser → localhost:3000/api/auth/login
-       → (Next.js rewrite) → localhost:4000/api/auth/login
-       ← response + Set-Cookie (stored under localhost:3000)
-```
-
-This eliminates CORS issues in both development and production. On Vercel, the rewrite forwards to your Render backend URL.
-
-### Auth Flow
-
-1. Browser POSTs to `/api/auth/login` (goes through Next.js → Express)
-2. Express validates credentials, signs JWT with `jose`
-3. Express sets `httpOnly` cookie — stored by browser under the **frontend** domain (due to rewrite proxy)
-4. Next.js `middleware.ts` verifies the JWT on every protected route using `jose`
-5. Dashboard server components call the backend directly with `Authorization: Bearer <token>` from cookies
+- **Landing Page** — Hero, Features, Statistics, Testimonials, Pricing, FAQ, Footer with smooth animations
+- **Authentication** — JWT login/signup with httpOnly cookies and protected routes
+- **Dashboard** — Portfolio value, monthly growth, risk score, AI suggestions, charts, transactions
+- **Analytics** — Sharpe ratio, win rate, drawdown analysis with Recharts
+- **Settings** — Profile, notifications, security preferences
+- **Admin Panel** — User management and system health (admin role only)
+- **AI Recommendations** — Investment signals with confidence scores
+- **MongoDB Atlas** — Cloud database with Prisma ORM
 
 ---
 
-## Deployment
+## Project Structure
 
-### Backend → Render (or Railway)
-
-1. Push `backend/` folder to GitHub
-2. Create a new **Web Service** on Render
-3. Set build command: `npm install && npm run build`
-4. Set start command: `node dist/index.js`
-5. Add environment variables:
-   ```
-   DATABASE_URL=mongodb+srv://user:pass@cluster.mongodb.net/novavest
-   JWT_SECRET=your-32-char-secret
-   FRONTEND_URL=https://your-app.vercel.app
-   NODE_ENV=production
-   PORT=4000
-   ```
-6. Note your backend URL: `https://novavest-api.onrender.com`
-
-### Database → MongoDB Atlas
-
-1. Create a free cluster at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Get the connection string: `mongodb+srv://user:pass@cluster.mongodb.net/novavest`
-3. Push schema and seed:
-```bash
-cd backend
-DATABASE_URL="mongodb+srv://..." npx prisma db push
-DATABASE_URL="mongodb+srv://..." npm run db:seed
+```
+novavest-ai/
+├── frontend/                 ← Next.js 14 (deployed on Vercel)
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/       ← login, signup pages
+│   │   │   ├── (dashboard)/  ← dashboard, analytics, settings, admin
+│   │   │   ├── session-reset/ ← cookie cleanup route handler
+│   │   │   └── page.tsx      ← landing page
+│   │   ├── components/
+│   │   │   ├── landing/      ← Navbar, Hero, Features, Pricing, FAQ, Footer
+│   │   │   └── dashboard/    ← Sidebar, Header, Charts, Tables, Cards
+│   │   ├── hooks/            ← useAuth
+│   │   ├── lib/              ← api, auth, utils, constants
+│   │   ├── middleware.ts      ← Edge Runtime route protection
+│   │   └── types/
+│   └── next.config.js        ← Rewrites /api/* → backend
+│
+├── backend/                  ← Express.js (deployed on Render)
+│   ├── src/
+│   │   ├── index.ts          ← Express entry point (port 4000)
+│   │   ├── routes/           ← auth, dashboard, transactions, profile, ai
+│   │   ├── middleware/        ← requireAuth (JWT + cookie/Bearer)
+│   │   └── lib/              ← auth, db (Prisma), validations, dummy-data
+│   ├── prisma/
+│   │   ├── schema.prisma     ← MongoDB schema
+│   │   └── seed.ts           ← Demo data seeder
+│   └── package.json
+│
+└── package.json              ← Root: runs both servers with concurrently
 ```
 
-### Frontend → Vercel
+---
 
-1. Push `frontend/` folder to GitHub (or the whole monorepo)
-2. Import project in Vercel dashboard
-3. Set **Root Directory** to `frontend`
-4. Add environment variables:
-   ```
-   API_URL=https://novavest-api.onrender.com
-   JWT_SECRET=your-32-char-secret   # same as backend
-   NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
-   ```
-5. Deploy
+## Quick Start (Local Development)
+
+### Prerequisites
+- Node.js 18+
+- MongoDB (local) or MongoDB Atlas account
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/AnKiTa2456/Nova-Vest-AI.git
+cd Nova-Vest-AI
+```
+
+### 2. Install dependencies
+
+```bash
+# Install all at once
+npm run install:all
+
+# Or manually
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+### 3. Configure environment variables
+
+**`backend/.env`**
+```env
+DATABASE_URL="mongodb://localhost:27017/novavest"
+JWT_SECRET="novavest-demo-secret-key-32chars-min"
+PORT=4000
+FRONTEND_URL="http://localhost:3000"
+NODE_ENV="development"
+```
+
+**`frontend/.env.local`**
+```env
+API_URL="http://localhost:4000"
+JWT_SECRET="novavest-demo-secret-key-32chars-min"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
+### 4. Set up database
+
+```bash
+cd backend
+
+# Push schema to MongoDB
+npm run db:push
+
+# Seed demo data
+npm run db:seed
+```
+
+### 5. Start both servers
+
+```bash
+# From root directory
+npm run dev
+
+# Backend → http://localhost:4000
+# Frontend → http://localhost:3000
+```
+
+---
+
+## Architecture
+
+### Frontend ↔ Backend Communication
+
+Next.js rewrites proxy all `/api/*` requests to the backend — same origin for cookies, no CORS issues:
+
+```
+Browser → vercel.app/api/auth/login
+        → (Next.js rewrite) → render.com/api/auth/login
+        ← JWT cookie set under vercel.app domain
+```
+
+### Auth Flow
+
+```
+1. POST /api/auth/login → Express validates credentials
+2. bcrypt.compare(password, hash) → verify against MongoDB
+3. jose.SignJWT() → create JWT token
+4. Set-Cookie: novavest-token (httpOnly, SameSite=Lax)
+5. Next.js middleware.ts verifies JWT on every protected route
+6. Server components use Bearer token for direct backend calls
+```
+
+### Route Protection
+
+| Route | Protection |
+|---|---|
+| `/dashboard`, `/analytics`, `/settings` | JWT required → redirect to `/login` |
+| `/admin` | JWT + ADMIN role required |
+| `/login`, `/signup` | Redirect to `/dashboard` if already logged in |
 
 ---
 
@@ -171,70 +169,141 @@ DATABASE_URL="mongodb+srv://..." npm run db:seed
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Recharts |
-| **Backend** | Node.js, Express, TypeScript, Zod, bcryptjs |
-| **Auth** | JWT (`jose`), httpOnly cookies, Next.js Edge middleware |
-| **Database** | Prisma ORM + MongoDB |
-| **Deployment** | Vercel (frontend) + Render/Railway (backend) + MongoDB Atlas |
+| **Frontend** | Next.js 14 App Router, TypeScript, Tailwind CSS |
+| **UI/Animation** | Framer Motion, Lucide Icons, Recharts |
+| **Backend** | Node.js, Express.js, TypeScript |
+| **Validation** | Zod |
+| **Auth** | JWT (`jose`), bcryptjs, httpOnly cookies |
+| **Database** | MongoDB Atlas, Prisma ORM |
+| **Deployment** | Vercel + Render + MongoDB Atlas |
 
 ---
 
 ## API Endpoints
 
-All routes are on the backend (port 4000). The frontend proxies them via `/api/*`.
-
 | Method | Path | Auth | Description |
 |---|---|---|---|
 | GET | `/health` | — | Health check |
-| POST | `/api/auth/login` | — | Login, sets cookie |
-| POST | `/api/auth/signup` | — | Register new user |
-| POST | `/api/auth/logout` | — | Clear cookie |
-| GET | `/api/auth/me` | ✓ | Current user |
-| GET | `/api/dashboard/stats` | ✓ | Full dashboard data |
-| GET | `/api/transactions` | ✓ | Paginated transactions |
-| POST | `/api/transactions` | ✓ | Create transaction |
-| GET | `/api/profile` | ✓ | User profile |
-| PATCH | `/api/profile` | ✓ | Update profile |
-| GET | `/api/ai/recommendations` | ✓ | AI signals |
+| POST | `/api/auth/login` | — | Login, sets JWT cookie |
+| POST | `/api/auth/signup` | — | Register, creates user + portfolio |
+| POST | `/api/auth/logout` | — | Clear JWT cookie |
+| GET | `/api/auth/me` | ✓ | Get current user from token |
+| GET | `/api/dashboard/stats` | ✓ | Portfolio, holdings, transactions, AI recs |
+| GET | `/api/transactions` | ✓ | Paginated transactions (filter by type) |
+| POST | `/api/transactions` | ✓ | Create new transaction |
+| GET | `/api/profile` | ✓ | User profile + trade stats |
+| PATCH | `/api/profile` | ✓ | Update name/email |
+| GET | `/api/ai/recommendations` | ✓ | AI investment signals |
 
 ---
 
-## Database Schema (Prisma)
+## Database Schema
 
 ```
-User          id, email, name, passwordHash, role (USER|ADMIN)
-Portfolio     userId, totalValue, riskScore, monthlyGain
-Holding       portfolioId, symbol, assetType, shares, avgPrice, currentPrice
-Transaction   userId, type (BUY|SELL), symbol, shares, price, status
+User
+  _id          ObjectId
+  email        String (unique)
+  name         String
+  passwordHash String
+  role         USER | ADMIN
+  createdAt    DateTime
+
+Portfolio
+  _id          ObjectId
+  userId       ObjectId → User
+  totalValue   Float
+  riskScore    Int (0-100)
+  monthlyGain  Float
+
+Holding
+  _id           ObjectId
+  portfolioId   ObjectId → Portfolio
+  symbol        String (AAPL, BTC...)
+  assetType     STOCK | CRYPTO | ETF | BOND
+  shares        Float
+  avgPrice      Float
+  currentPrice  Float
+  allocation    Float (%)
+
+Transaction
+  _id       ObjectId
+  userId    ObjectId → User
+  type      BUY | SELL
+  symbol    String
+  shares    Float
+  price     Float
+  total     Float
+  status    PENDING | COMPLETED | FAILED
+  createdAt DateTime
 ```
+
+---
+
+## Deployment
+
+### Backend → Render
+
+| Setting | Value |
+|---|---|
+| Root Directory | `backend` |
+| Build Command | `npm install && npm run build` |
+| Start Command | `npm run start` |
+
+**Environment Variables:**
+```
+DATABASE_URL=mongodb+srv://user:pass@cluster.mongodb.net/novavest
+JWT_SECRET=your-32-char-secret
+FRONTEND_URL=https://your-app.vercel.app
+NODE_ENV=production
+```
+
+### Frontend → Vercel
+
+| Setting | Value |
+|---|---|
+| Root Directory | `frontend` |
+| Framework | Next.js |
+
+**Environment Variables:**
+```
+API_URL=https://your-backend.onrender.com
+JWT_SECRET=your-32-char-secret
+```
+
+### Database → MongoDB Atlas
+
+1. Create free cluster at [cloud.mongodb.com](https://cloud.mongodb.com)
+2. Add `0.0.0.0/0` to Network Access
+3. Get connection string and set as `DATABASE_URL`
+4. Run `npm run db:push && npm run db:seed`
 
 ---
 
 ## Architecture Decisions & Tradeoffs
 
-| Decision | Choice | Why |
+| Decision | Choice | Reason |
 |---|---|---|
-| **Separate backend** | Express on Render vs Next.js API Routes | Independent scaling, cleaner separation of concerns, easier to add microservices later |
-| **Next.js rewrites proxy** | `/api/*` proxied to backend | Eliminates CORS; cookies stay same-origin; single domain in production |
-| **JWT in httpOnly cookie** | vs localStorage | XSS-proof; auto-sent on every request; cleared on logout |
-| **Prisma + MongoDB** | vs Mongoose | Type-safe queries, schema validation, migration support |
-| **MongoDB replica set** | Enabled locally | Required by Prisma 5.x for all write operations |
-| **Edge middleware** | for route protection | Runs before page render, no flash of unauthenticated content |
-| **Server components** | for dashboard data fetch | No loading spinner; data fetched at render time; SEO-friendly |
+| Separate backend | Express on Render | Independent scaling, clean separation |
+| Next.js rewrites proxy | `/api/*` → backend | No CORS issues, cookies stay same-origin |
+| JWT in httpOnly cookie | vs localStorage | XSS-proof, auto-sent on every request |
+| Prisma + MongoDB | vs Mongoose | Type-safe queries, schema validation |
+| Edge middleware | for route protection | No flash of unauthenticated content |
+| Server components | for dashboard fetch | Data fetched at render time, no loading spinner |
 
 ### Assumptions
-- Users have one portfolio each (1:1 User → Portfolio)
-- Transactions are append-only (no edits/deletes)
-- AI recommendations are pre-computed (no real-time ML inference)
-- Risk score is managed server-side, not user-editable
+- One portfolio per user (1:1 relationship)
+- Transactions are append-only
+- AI recommendations are pre-computed (no live ML inference)
+- Risk score is managed server-side
 
 ---
 
 ## Future Improvements
 
-- Real-time price data (Polygon.io WebSocket)
-- OAuth (Google, GitHub)
-- Brokerage integration (Plaid)
-- Production AI pipeline
-- Export reports (PDF/CSV)
+- Real-time price data via Polygon.io WebSocket
+- OAuth login (Google, GitHub)
+- Brokerage integration via Plaid
+- Live AI model for investment analysis
+- PDF/CSV report export
 - Email verification and 2FA
+- Mobile app (React Native)
