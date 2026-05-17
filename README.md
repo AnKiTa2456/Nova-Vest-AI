@@ -2,9 +2,10 @@
 
 A full-stack fintech SaaS platform built with Next.js 14, Express, and MongoDB Atlas. Features a glassmorphism dark UI, JWT authentication, real-time dashboard, and AI investment recommendations.
 
-🌐 **Live Demo:** https://nova-vest-ai.vercel.app
-🔧 **Backend API:** https://nova-vest-ai.onrender.com
-📦 **GitHub:** https://github.com/AnKiTa2456/Nova-Vest-AI
+🌐 **Live Demo:** [https://nova-vest-ai.vercel.app](https://nova-vest-ai.vercel.app)
+🔧 **Backend API:** [https://nova-vest-ai.onrender.com](https://nova-vest-ai.onrender.com)
+📦 **GitHub:** [https://github.com/AnKiTa2456/Nova-Vest-AI](https://github.com/AnKiTa2456/Nova-Vest-AI)
+🗄️ **Database:** MongoDB Atlas (cluster0.oplgq.mongodb.net)
 
 ---
 
