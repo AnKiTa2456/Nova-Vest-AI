@@ -24,23 +24,23 @@ A full-stack fintech SaaS platform built with Next.js 14, Express, and MongoDB A
 
 | Landing Page | Login |
 |---|---|
-| ![Landing](snaps_nova%20vest%20ai/deployed/01_landing_hero.png) | ![Login](snaps_nova%20vest%20ai/deployed/02_login_page.png) |
+| ![Landing](screenshots/deployed/01_landing_hero.png) | ![Login](screenshots/deployed/02_login_page.png) |
 
 | Dashboard (Demo User — $247K Portfolio) | AI Recommendations + Activity Feed |
 |---|---|
-| ![Dashboard](snaps_nova%20vest%20ai/deployed/12_dashboard_demo_user_alex_morgan.png) | ![AI Recs](snaps_nova%20vest%20ai/localhost/11_dashboard_ai_recommendations_activity_feed.png) |
+| ![Dashboard](screenshots/deployed/12_dashboard_demo_user_alex_morgan.png) | ![AI Recs](screenshots/localhost/11_dashboard_ai_recommendations_activity_feed.png) |
 
 | Analytics — Metrics & Monthly P&L | Analytics — Holdings Table |
 |---|---|
-| ![Analytics](snaps_nova%20vest%20ai/deployed/08_analytics_metrics_admin_user.png) | ![Holdings](snaps_nova%20vest%20ai/deployed/09_analytics_holdings_table.png) |
+| ![Analytics](screenshots/deployed/08_analytics_metrics_admin_user.png) | ![Holdings](screenshots/deployed/09_analytics_holdings_table.png) |
 
 | Analytics — Sector Performance | Admin Panel |
 |---|---|
-| ![Sector](snaps_nova%20vest%20ai/deployed/10_analytics_sector_performance.png) | ![Admin](snaps_nova%20vest%20ai/deployed/06_admin_panel_user_management.png) |
+| ![Sector](screenshots/deployed/10_analytics_sector_performance.png) | ![Admin](screenshots/deployed/06_admin_panel_user_management.png) |
 
 | Settings | MongoDB Atlas — Database |
 |---|---|
-| ![Settings](snaps_nova%20vest%20ai/deployed/07_settings_profile_admin_user.png) | ![Atlas](snaps_nova%20vest%20ai/atlas/01_database_overview_all_collections.png) |
+| ![Settings](screenshots/deployed/07_settings_profile_admin_user.png) | ![Atlas](screenshots/atlas/01_database_overview_all_collections.png) |
 
 ---
 
